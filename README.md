@@ -1,7 +1,7 @@
 # vrising-database
 BepInEx plugin-library for providing database services to other plugins
 
-```
+```json
 {
     "Plugins": {
         "com.agitoreiken.permissions:Persistent": "Persistent",
