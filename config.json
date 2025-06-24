@@ -6,8 +6,7 @@
         "com.agitoreiken.playerstats": "Local"
     },
     "DefaultConnector": "Local",
-    "ConnectOnStartup": true,
-    "EnableMysqlLogger": true,
+    "EnableMysqlLogger": false,
     "Connectors": {
         "Persistent": {
             "Type": "Mysql",
