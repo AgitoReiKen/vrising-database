@@ -5,9 +5,9 @@ namespace Database.API;
 
 public static class DatabaseExtensions
 {
-    /*
-     * 
-     */
+    /// <summary>
+    /// Allows specifying parameters in query with @p0, @p1, ...
+    /// </summary>
     public static DbCommand Query(this DbConnection db, string query, params object[] parameters)
     {
         DbCommand command = db.CreateCommand();

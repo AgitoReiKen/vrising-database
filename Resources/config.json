@@ -1,12 +1,11 @@
 {
-    "Plugins": {
-        "com.agitoreiken.permissions:Persistent": "Persistent",
-        "com.agitoreiken.permissions:Local": "Local",
-        "com.agitoreiken.localization": "Persistent",
-        "com.agitoreiken.playerstats": "Local"
-    },
-    "DefaultConnector": "Local",
+    "DefaultConnector": "Temp",
     "EnableMysqlLogger": false,
+    "Mappings": {
+        "com.agitoreiken.localization": "Persistent",
+        "com.agitoreiken.permissions": "Persistent",
+        "com.agitoreiken.commands-middleware": "Temp"
+    }, 
     "Connectors": {
         "Persistent": {
             "Type": "Mysql",
@@ -19,10 +18,10 @@
                 "CreateDatabase": true
             }
         },
-        "Local": {
+        "Temp": {
             "Type": "Sqlite",
             "Sqlite": {
-                "Path": "BepInEx/config/Database/local.db"
+                "Path": "BepInEx/config/com.agitoreiken.database/local.db"
             }
         }
     }

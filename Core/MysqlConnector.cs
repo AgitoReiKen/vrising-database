@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using BepInEx;
 using Database.API;
 using Database.Utils;
-using Gee.External.Capstone.M68K;
 using MySqlConnector;
 using MySqlConnector.Logging;
 using Newtonsoft.Json.Linq;

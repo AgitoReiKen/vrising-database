@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using Database.API;
+using Database.Core;
 using Database.Utils;
 using Il2CppSystem.Diagnostics;
 
@@ -28,9 +29,7 @@ public class GeneralTest : IDisposable
             }
         }
         
-        var cc = config.Connectors.Count;
-
-        System.Collections.Generic.Dictionary<string, Action<DbConnection>> stages =
+        Dictionary<string, Action<DbConnection>> stages =
             new Dictionary<string, Action<DbConnection>>();
         stages.Add("DropTableIfExists", DropTableIfExists);
         stages.Add("CreateTable", TestCreateTable);

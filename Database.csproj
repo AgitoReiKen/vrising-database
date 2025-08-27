@@ -3,10 +3,13 @@
     <AssemblyName>Database</AssemblyName>
     <Description>Database connection provider for BepInEx mods.</Description>
     <RootNamespace>Database</RootNamespace>
+    <PackageId>Database</PackageId>
+    <BepInExPluginGuid>com.agitoreiken.database</BepInExPluginGuid>
+    <InteropLibPath>F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\interop_src</InteropLibPath>
+    
     <Version>1.0.0</Version>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0.1</FileVersion>
-    <BepInExPluginGuid>com.agitoreiken.database</BepInExPluginGuid>
     
     <TargetFramework>net6.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -17,7 +20,6 @@
     </RestoreSources>
     <DebugType>Portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <PackageId>Database</PackageId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
@@ -32,26 +34,21 @@
     <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" /> 
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /Y /F &quot;$(TargetPath)&quot; &quot;F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\plugins\com.agitoreiken.database\&quot;" />
+    <Exec Command="xcopy /Y /F &quot;$(TargetPath)&quot; &quot;F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\plugins\$(BepInExPluginGuid)\&quot;" />
+    <Exec Command="xcopy /Y /F &quot;$(ProjectDir)Resources\*.json&quot; &quot;F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\config\$(BepInExPluginGuid)\&quot;" />
   </Target>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\interop_src\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(InteropLibPath)\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\interop_src\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>$(InteropLibPath)\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem">
-      <HintPath>F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\interop_src\Il2CppSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Configuration">
-      <HintPath>F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\interop_src\Il2CppSystem.Configuration.dll</HintPath>
+      <HintPath>$(InteropLibPath)\Il2CppSystem.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\interop_src\Il2CppSystem.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2CppSystem.Data">
-      <HintPath>F:\SteamLibrary\steamapps\common\VRisingDedicatedServer\BepInEx\interop_src\Il2CppSystem.Data.dll</HintPath>
+      <HintPath>$(InteropLibPath)\Il2CppSystem.Core.dll</HintPath>
     </Reference> 
   </ItemGroup>
 </Project>

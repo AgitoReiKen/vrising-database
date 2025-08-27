@@ -2,21 +2,23 @@
 using Database.Core;
 using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
+using BepInEx;
 using Database.Utils;
 using Il2CppSystem.Linq;
 
-namespace Database;
+namespace Database.Core;
  
 public class Config
 { 
     public Dictionary<string, IDatabaseConnector> Connectors;
     public string DefaultConnector;
-    public Dictionary<string, string> Plugins;
+    public Dictionary<string, string> Mappings;
     public bool EnableMysqlLogger;
     public Config(JObject json)
     {
         Connectors = new();
-        Plugins = new();
+        Mappings = new();
         DefaultConnector = null;
         EnableMysqlLogger = false;
         var connectors = (json["Connectors"].Cast<JObject>()).Properties().ToList();
@@ -36,6 +38,10 @@ public class Config
                     var connector = new SqliteConnector(prop.Value.Value<JObject>(type));
                     Connectors.Add(key, connector);
                 }
+                else
+                {
+                    Log.Error($"Database Type {type} is not supported");
+                }
             }
             catch (Exception ex)
             {
@@ -43,28 +49,59 @@ public class Config
                 Log.Error($"{ex.Message}");
             }
         }
-        if (!json.TryGetValue("DefaultConnector", out JToken defaultConnector) || !Connectors.ContainsKey((string)defaultConnector))
+        if (json.TryGetValue("DefaultConnector", out JToken defaultConnector) && Connectors.ContainsKey((string)defaultConnector))
         {
-            Log.Warning("DefaultConnector either is not set or invalid. Plugins that are not explicitly set, will not get a database connector.");
+            DefaultConnector = (string)defaultConnector;
+        }
+        else
+        {
+            Log.Warning("DefaultConnector either is not set or invalid. Mappings that are not explicitly set - will not get a database connector.");
         }
 
-        var plugins = (json["Plugins"].Cast<JObject>()).Properties().ToList();
-        foreach (var prop in plugins)
+        var mappings = (json["Mappings"].Cast<JObject>()).Properties().ToList();
+        foreach (var prop in mappings)
         {
             var key = prop.Name;
             var connectorId = (string)prop.Value;
             if (!Connectors.ContainsKey(connectorId))
             {
-                Log.Error($"Plugin {key} uses connector that doesn't exists - {connectorId}");
+                Log.Error($"Mapping {key} uses connector that doesn't exists - {connectorId}");
                 throw new System.Exception("Invalid configuration.");
             }
             
-            Plugins.Add(key, connectorId);
+            Mappings.Add(key, connectorId);
         }
 
         if (json.TryGetValue("EnableMysqlLogger", out JToken enableMysqlLogger))
         {
             EnableMysqlLogger = (bool)enableMysqlLogger;
         }
+    }
+    public static Config Load()
+    {
+        var configPath = $"{Paths.ConfigPath}/{MyPluginInfo.PLUGIN_GUID}/config.json";
+        string configText;
+        try
+        {
+            configText = File.ReadAllText(configPath);
+        }
+        catch (Exception)
+        {
+            Log.Error($"Couldn't read config at {configPath}");
+            throw;
+        }
+
+        JObject json;
+        try
+        {
+            json = JObject.Parse(configText);
+        }
+        catch (Exception)
+        {
+            Log.Error("Couldn't parse config");
+            throw;
+        }
+
+        return new Config(json);
     }
 }

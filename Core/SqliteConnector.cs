@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using Database.API;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -34,7 +33,7 @@ public class SqliteConnector : IDatabaseConnector
                 File.Create(Path).Close();
                 Log.Info($"[SqliteDatabase] Database created at {Path}");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Log.Error($"[SqliteDatabase] Couldn't create database at {Path}");
                 throw;
